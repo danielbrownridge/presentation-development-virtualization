@@ -1,1 +1,1 @@
-hieroglyph
+git+https://github.com/nyergler/hieroglyph#egg=hieroglyph
