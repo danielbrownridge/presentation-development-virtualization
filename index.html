@@ -1,0 +1,1004 @@
+<!--
+Google IO 2012/2013 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahé <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+--><!DOCTYPE html>
+
+
+<html>
+<head>
+  <title>Development with virtualization &mdash; Development with Virtual Machines 2019.01.16 documentation</title>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+  <!--This one seems to work all the time, but really small on ipad-->
+  <!--<meta name="viewport" content="initial-scale=0.4">-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <meta name="hieroglyph-title" data-config-title>
+  <meta name="hieroglyph-subtitle" data-config-subtitle>
+  <meta name="hieroglyph-presenter" data-config-presenter>
+
+  
+  <link rel="stylesheet" media="all"
+        href="_static/theme/css/default.css">
+  <link rel="stylesheet" media="all"
+        href="_static/theme/css/hieroglyph.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 480px)"
+        href="_static/theme/css/phone.css">
+
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2019.01.16',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <script data-main="_static/js/slides"
+            src="_static/js/require-1.0.8.min.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Development with Virtual Machines 2019.01.16 documentation" href="#" /> 
+</head>
+<body style="opacity: 0">
+
+<slides class="layout-widescreen">
+
+  
+
+  
+    <slide class="title-slide segue nobackground level-1" id="development-with-virtualization">
+    <hgroup>
+      <h1>Development with virtualization</h1>
+    </hgroup>
+    <article class="">
+      <p>Daniel Brownridge</p>
+<p>Software Architect, Yobota</p>
+<p>January 2019</p>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="overview">
+    <hgroup>
+      <h2>Overview</h2>
+    </hgroup>
+    <article class="">
+      <ul class="simple">
+<li>Goals</li>
+<li>Current state of development</li>
+<li>Background on Virtualization</li>
+<li>Introduce the specific technologies</li>
+<li>Demonstration</li>
+<li>Question &amp; Answers</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="non-goals">
+    <hgroup>
+      <h2>Non goals</h2>
+    </hgroup>
+    <article class="">
+      <p>This talk will not be about:</p>
+<ul class="simple">
+<li>Detailed tutorials</li>
+<li>Solutions to your specific use case</li>
+<li>Hosted infrastructure</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="goals">
+    <hgroup>
+      <h2>Goals</h2>
+    </hgroup>
+    <article class="">
+      <p>This talk will be about:</p>
+<ul class="simple">
+<li>Making your life easier</li>
+<li>Local development</li>
+<li>Unlocking the hidden power of your laptop</li>
+<li>Gaining an understanding of Virtualization</li>
+<li>Showing the kinds of problems that can be solved</li>
+<li>Introducing a practical toolkit of related technologies</li>
+<li>Giving you ideas on where to go next</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="current-state-of-development">
+    <hgroup>
+      <h2>Current state of development</h2>
+    </hgroup>
+    <article class="">
+      <p>We have some problems to solve:</p>
+<ul class="simple">
+<li>Development / Production mismatch</li>
+<li>Complexity of development environment configuration</li>
+<li>Testing System Architecture</li>
+<li>Consistency of development environments</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="what-is-the-development-production-mismatch">
+    <hgroup>
+      <h2>What is the Development / Production mismatch?</h2>
+    </hgroup>
+    <article class="">
+      <p>Loads of differences between development environments and production infrastructure:</p>
+<ul class="simple">
+<li>Different Operating Systems</li>
+<li>Different library versions</li>
+<li>Different hardware</li>
+<li>Different configuration</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="why-is-setting-setting-up-a-development-environment-hard">
+    <hgroup>
+      <h2>Why is setting setting up a development environment hard?</h2>
+    </hgroup>
+    <article class="">
+      <ul class="simple">
+<li>Lots to do - many things to install</li>
+<li>Constant change - package and library versions change</li>
+<li>Documentation is often:<ul>
+<li>out of date</li>
+<li>incomplete</li>
+<li>badly written</li>
+<li>non-existent</li>
+</ul>
+</li>
+<li>Requires very specific knowledge / skillset (e.g. Unix commands)</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="how-do-you-test-system-architecture">
+    <hgroup>
+      <h2>How do you test system architecture?</h2>
+    </hgroup>
+    <article class="">
+      <p>Testing code is hard enough, but how do you test a multi component system?</p>
+<ul class="simple">
+<li>How do you test deployment or build processes?</li>
+<li>How do you test network issues?</li>
+<li>How do you test how different components interact?</li>
+<li>How do you test multiple instances of your app running conncurrently?</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="why-is-development-environment-consistency-hard">
+    <hgroup>
+      <h2>Why is development environment consistency hard?</h2>
+    </hgroup>
+    <article class="">
+      <blockquote>
+<div><ul>
+<li><p class="first">Even if they exist, people don’t or won’t or mis-read instructions</p>
+</li>
+<li><p class="first">Development involves breaking things</p>
+</li>
+<li><p class="first">Bug-fixing can put your environment in a weird state</p>
+</li>
+<li><p class="first">But it works on my machine!</p>
+</li>
+<li><p class="first">Hack it till it works but:</p>
+<ul class="simple">
+<li>can’t remember or</li>
+<li>don’t understand or</li>
+<li>don’t care</li>
+</ul>
+<p>… how or why it works?</p>
+</li>
+<li><p class="first">People install random things because they need to or feel like it</p>
+</li>
+</ul>
+</div></blockquote>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="what-are-the-consequences-of-all-this">
+    <hgroup>
+      <h2>What are the consequences of all this?</h2>
+    </hgroup>
+    <article class="">
+      <blockquote>
+<div><ul class="simple">
+<li>stress and frustration</li>
+<li>really hard to reproduce bugs</li>
+<li>bugs are caught late in the day</li>
+<li>wasted time investigating non-issues</li>
+<li>lower quality of code</li>
+<li>reluctance to experiment for fear of failure</li>
+</ul>
+</div></blockquote>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="virtualization-can-help">
+    <hgroup>
+      <h2>Virtualization can help!</h2>
+    </hgroup>
+    <article class="">
+      <p>It is not a complete solution to everything, but what if:</p>
+<ul class="simple">
+<li>You didn’t have to configure your development environment?</li>
+<li>If you broke it you could throw it away and get a new one?</li>
+<li>You knew your setup was exactly the same as everyone else?</li>
+<li>You could experiment with whole pieces of infrastucture
+not just code?</li>
+<li>All the standard tools you need were just there?</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="what-is-virtualization">
+    <hgroup>
+      <h2>What is virtualization?</h2>
+    </hgroup>
+    <article class="">
+      <p>A simple idea:</p>
+<ul class="simple">
+<li>Simulating a resource inside a computer</li>
+</ul>
+<p>A resource can mean:</p>
+<ul class="simple">
+<li>Hardware (another computer)</li>
+<li>Operating System</li>
+<li>Network</li>
+<li>Storage</li>
+<li>and so on …</li>
+</ul>
+<p>Not a new concept:</p>
+<ul class="simple">
+<li>It existed on mainframes in the 60’s</li>
+</ul>
+<p>A big topic:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Many different kinds of virtualization</li>
+</ul>
+</div></blockquote>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="types-of-virtualization">
+    <hgroup>
+      <h2>Types of virtualization</h2>
+    </hgroup>
+    <article class="">
+      <ul class="simple">
+<li>Hardware Virtualization</li>
+<li>Desktop Virtualization</li>
+<li>Operating System Virtualization</li>
+<li>Network Virtualization</li>
+<li>Storage Virtualization</li>
+<li>Desktop Virtualization</li>
+<li>And many more niche variants</li>
+</ul>
+<p>Key ones we are going to focus on are:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Hardware</li>
+<li>Operating System</li>
+</ul>
+</div></blockquote>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="hardware-virtualization">
+    <hgroup>
+      <h2>Hardware virtualization</h2>
+    </hgroup>
+    <article class="">
+      <p>Basic idea is:</p>
+<ul class="simple">
+<li>Create the illusion of some real hardware inside your system</li>
+</ul>
+<p>Goal is:</p>
+<ul class="simple">
+<li>Make the illusion good enough so you can’t tell the difference</li>
+<li>Importantly software running inside the illusion can’t tell the difference</li>
+</ul>
+<p>How do you do this?</p>
+<ul class="simple">
+<li>Somehow provide the same instuction set and I/O as real hardware</li>
+</ul>
+<p>Theory is:</p>
+<ul class="simple">
+<li>If the instuction set and I/O are the same, software will run the same</li>
+</ul>
+<p>Implementation can be:</p>
+<ul class="simple">
+<li>Software only</li>
+<li>Hardware assisted</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="software-based-virtualization-emulation">
+    <hgroup>
+      <h2>Software-based virtualization (Emulation)</h2>
+    </hgroup>
+    <article class="">
+      <p class="build">Simple idea:</p>
+<ul class="simple">
+<li>Write a simulation program with functions for each target machine instruction</li>
+<li>The functions just have to have the same inputs and outputs as your hardware</li>
+<li>Software run via your simulation program as if it was running on real hardware</li>
+</ul>
+<p>Advantages:</p>
+<ul class="simple">
+<li>Can emulate any target architecture</li>
+<li>Lets you run software that was designed for a different hardware</li>
+<li>e.g. run software for an ARM CPU on an Intel CPU</li>
+</ul>
+<p>Use cases:</p>
+<ul class="simple">
+<li>Developing embedded systems</li>
+<li>Running old console games</li>
+</ul>
+<p>It works very well, however …</p>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="software-based-virtualization-emulation-2">
+    <hgroup>
+      <h2>Software-based virtualization (Emulation) 2</h2>
+    </hgroup>
+    <article class="">
+      <p>What is the problem with simulating hardware in software?</p>
+<ul class="simple">
+<li>Re-creating the logical behaviour of a system is the easy bit</li>
+<li>Challenge is the non-functional parts e.g. timing.</li>
+<li>Most important factor is performance</li>
+</ul>
+<p>Key point:</p>
+<ul class="simple">
+<li>Hardware simulated in software incurs a huge performance hit</li>
+<li>Can be less than 50% of host system</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="software-based-virtualization-emulation-3">
+    <hgroup>
+      <h2>Software-based virtualization (Emulation) 3</h2>
+    </hgroup>
+    <article class="">
+      <p>Limited to quite specific situations</p>
+<p>Useful in situations where:</p>
+<ul class="simple">
+<li>You don’t care about performance - testing logical correctness</li>
+<li>Your parent system is significantly more powerful than what you are simulating</li>
+</ul>
+<p>Consequences are:</p>
+<ul class="simple">
+<li>Emulation is useful where wasted performance is outweight by benefits brought from of abstraction</li>
+<li>Not suitable when you need to use all available resources</li>
+<li>For normal development the benefits typically don’t outweight the costs</li>
+</ul>
+<p>Implementations:</p>
+<ul class="simple">
+<li>Literally hundreds</li>
+<li>QEMU is an important project</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="hardware-assisted-hardware-virtualization">
+    <hgroup>
+      <h2>Hardware-assisted hardware virtualization</h2>
+    </hgroup>
+    <article class="">
+      <p>Goal:</p>
+<ul class="simple">
+<li>Avoid the performance penalty incured by software-based virtualization</li>
+<li>Run full operating systems un-modified in virtual machines on a host system</li>
+</ul>
+<p>Basic idea:</p>
+<ul class="simple">
+<li>Allow the virtual machine to use the raw hardware of the host system</li>
+</ul>
+<p>Problem:</p>
+<ul class="simple">
+<li>Much easier said than done</li>
+<li>If host software (an OS) is already running the VM can’t get the whole hardware unmodified</li>
+<li>But if the VM gets modified hardware you’re back to software virtualization</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="hardware-assisted-hardware-virtualization-2">
+    <hgroup>
+      <h2>Hardware-assisted hardware virtualization 2</h2>
+    </hgroup>
+    <article class="">
+      <p>So how can this work?</p>
+<ul class="simple">
+<li>Host system has to somehow manage and allocate resources to virtual machines</li>
+<li>A system is needed to manage the resources of the host - this is called a Hypervisor</li>
+</ul>
+<p>Two main approaches hypervisors take:</p>
+<ul class="simple">
+<li>Paravirtualization</li>
+<li>Full-virtualization</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="paravirtualization">
+    <hgroup>
+      <h2>Paravirtualization</h2>
+    </hgroup>
+    <article class="">
+      <p>A form of hardware virtualization where the hypervisor provides:</p>
+<ul class="simple">
+<li>access to system resources</li>
+<li>an API</li>
+</ul>
+<p>Operating Systems are modified very slightly to use the Hypervisor API</p>
+<ul class="simple">
+<li>Virtual Machines are called paravirtualized guests</li>
+<li>It’s a slight cheat</li>
+<li>It works very well in practice</li>
+<li>Achieves near raw system performance</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="paravirtualization-case-study">
+    <hgroup>
+      <h2>Paravirtualization - Case study</h2>
+    </hgroup>
+    <article class="">
+      <p>Xen Project</p>
+<ul class="simple">
+<li>Publically released in 2003</li>
+<li>Started as a University of Cambridge research project</li>
+<li>Heavily used in industry</li>
+<li>Originally only supported Paravirtualization</li>
+<li>Now supports many modes of virtualization</li>
+</ul>
+<div class="figure">
+<img alt="_images/xen-project.png" src="_images/xen-project.png" />
+</div>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="intel-virtualization-vt-x">
+    <hgroup>
+      <h2>Intel virtualization (VT-x)</h2>
+    </hgroup>
+    <article class="">
+      <p>Basic idea:</p>
+<ul class="simple">
+<li>Add new special instructions to the x86 architecture to support virtual machines</li>
+</ul>
+<p>How it works:</p>
+<ul class="simple">
+<li>10 new instructions addded to the CPU - Virtual Machine Extensions (vmx)</li>
+<li>permit entering and exiting virtual execution mode</li>
+<li>guest OS thinks it’s running as full priviledge</li>
+<li>host OS remains unaffected</li>
+</ul>
+<p>Represents a major breakthrough:</p>
+<ul class="simple">
+<li>First introduced onto CPUs by Intel in November 2005</li>
+<li>Equivalent instuctions introduced by AMD</li>
+</ul>
+<p>In many ways this technology triggered the modern era of cloud computing</p>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="full-hardware-virtualization">
+    <hgroup>
+      <h2>Full hardware virtualization</h2>
+    </hgroup>
+    <article class="">
+      <p>Escapes the trap:</p>
+<ul class="simple">
+<li>OS can run unmodified and at native performance in a host</li>
+</ul>
+<p>How it works:</p>
+<ul class="simple">
+<li>The hypervisor uses Virtual Machines Extensions (vmx)</li>
+<li>Virtual Machines are created and hypervisor manages access to underlying resources</li>
+</ul>
+<p>Consequences:</p>
+<ul class="simple">
+<li>Resources of physical hardware can be sliced up into isolated virtual machines</li>
+<li>Virtual machines perform near 100% of host resources - useable for real work</li>
+<li>Unlocks huge amount of possibilities and flexbility</li>
+<li>Virtual machines are tied to the same architecture as underlying system</li>
+<li>Not suitable for different target architecture</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="types-of-hypervisors">
+    <hgroup>
+      <h2>Types of Hypervisors</h2>
+    </hgroup>
+    <article class="">
+      <p>Two main categories of hypervisors:</p>
+<ul class="simple">
+<li>Distinction is usecase</li>
+</ul>
+<p>Type-1 - native or bare metal hypervisors</p>
+<ul class="simple">
+<li>hypervisor runs directly on the host hardware</li>
+<li>no normal operating system is running</li>
+<li>suitable for servers only</li>
+<li>Examples: Xen, Hyper-V, VmWare ESX</li>
+</ul>
+<p>Type-2 - hosted hypervisors</p>
+<ul class="simple">
+<li>runs as a process in a host operating system</li>
+<li>operating system can be used as normal as well as host virtual machines</li>
+<li>suitable for servers and desktops</li>
+<li>Examples: VmWare Workstation, Virtualbox, Parallels Desktop</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="hypervisor-case-study-virtualbox">
+    <hgroup>
+      <h2>Hypervisor case study - Virtualbox</h2>
+    </hgroup>
+    <article class="">
+      <p>Virtualbox is a Type-2 hypervisor:</p>
+<ul class="simple">
+<li>Originally developed by Sun and now Oracle</li>
+</ul>
+<p>Many compelling features:</p>
+<ul class="simple">
+<li>Fully open-source and free to use</li>
+<li>Runs on: Windows; macOS; Linux; Solaris</li>
+<li>Initially released 2007 - very stable codebase</li>
+<li>Supports hardware assisted virtualization with vmx</li>
+<li>Provides an external API for automation</li>
+<li>Virtual networking, graphics and storage</li>
+</ul>
+<div class="figure">
+<img alt="_images/virtualbox.jpeg" src="_images/virtualbox.jpeg" />
+</div>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="id1">
+    <hgroup>
+      <h2>Hypervisor case study - Virtualbox</h2>
+    </hgroup>
+    <article class="">
+      <p>What can you do with it?</p>
+<ul class="simple">
+<li>Define new virtual machines</li>
+<li>Allocate resources - upper limit of less than your host</li>
+<li>Install Operating systems from ISO images</li>
+</ul>
+<p>Graphical:</p>
+<ul class="simple">
+<li>Can run a full desktop environment in a VM</li>
+<li>e.g. Run Windows Desktop in virtual machine on an Ubuntu Host</li>
+<li>Cool features - seamless mode</li>
+</ul>
+<p>Servers:</p>
+<ul class="simple">
+<li>Ideal for running different server Operating Systems for developement</li>
+<li>e.g. Can do Linux development on a Mac</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="operating-system-virtualization-containers">
+    <hgroup>
+      <h2>Operating System virtualization - Containers</h2>
+    </hgroup>
+    <article class="">
+      <p>Operating System virtualization is also known as containerization</p>
+<p>Goal:</p>
+<ul class="simple">
+<li>Application thinks it has it’s own operating system</li>
+<li>Bundle libraries, tools and configuration together</li>
+</ul>
+<p>How it works:</p>
+<ul class="simple">
+<li>Operating system kernel supports isolated user spaces - containers</li>
+<li>Container management software supports creating and managing containers</li>
+</ul>
+<p>Consequences:</p>
+<ul class="simple">
+<li>Focus is on isolation of applications</li>
+<li>Lightweight and fast - no attempt to recreate a whole machine</li>
+<li>Limited to same operating system (kernel) as host machine</li>
+<li>Containers share resources such as memory so not truly isolated</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="container-case-study-docker">
+    <hgroup>
+      <h2>Container case study - Docker</h2>
+    </hgroup>
+    <article class="">
+      <p>Docker performs operating system level virtualization</p>
+<ul class="simple">
+<li>Released in 2013</li>
+<li>Very popular</li>
+<li>Large online collection of container definitions for popular applications</li>
+<li>Widely supported by infrastructure providers e.g. Heroku, AWS, Azure</li>
+</ul>
+<p>A managing process controls containers - dockerd</p>
+<p>Images are downloaded and then registered:</p>
+<ul class="simple">
+<li>launching an application is very easy</li>
+</ul>
+<div class="figure">
+<img alt="_images/docker.png" src="_images/docker.png" />
+</div>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="virtual-machines-versus-containers">
+    <hgroup>
+      <h2>Virtual Machines versus Containers</h2>
+    </hgroup>
+    <article class="">
+      <p>Which should I use?</p>
+<ul class="simple">
+<li>Virtual machines are more heavyweight but give true isolation and OS independence</li>
+<li>Containers are lightweight but share resources and tie you to one kernel</li>
+</ul>
+<p>Bottom line:</p>
+<ul class="simple">
+<li>goals overlap but they solve different problems.</li>
+</ul>
+<p>Solution?</p>
+<ul class="simple">
+<li>Use both and get the best of both worlds</li>
+<li>Configure a virtual machine for the OS and put containers inside</li>
+</ul>
+<p>Heroku does this:</p>
+<ul class="simple">
+<li>A ‘stack’ is underneath an AWS EC2 instance (virtual machine)</li>
+<li>A ‘dyno’ is a container</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="remaining-problems">
+    <hgroup>
+      <h2>Remaining problems</h2>
+    </hgroup>
+    <article class="">
+      <p>Virtualization techiniques make many things possible but:</p>
+<ul class="simple">
+<li>You still have configuration to worry about</li>
+<li>Configurating a virtual machine or a container can be a manual process</li>
+<li>Consistency errors can still creep in</li>
+</ul>
+<p>Solution:</p>
+<ul class="simple">
+<li>automate with configuration management</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="configuration-management">
+    <hgroup>
+      <h2>Configuration Management</h2>
+    </hgroup>
+    <article class="">
+      <p>Basic idea:</p>
+<ul class="simple">
+<li>Turn configuration into code</li>
+</ul>
+<p>Consequences:</p>
+<ul class="simple">
+<li>Less reliance on documentation - cull the wiki</li>
+<li>Configuration can be put under source control</li>
+<li>Environment configuration exactly repeatable</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="configuration-management-case-study-vagrant">
+    <hgroup>
+      <h2>Configuration Management case study - Vagrant</h2>
+    </hgroup>
+    <article class="">
+      <p>Core goal:</p>
+<ul class="simple">
+<li>Automate the creation of virtual machines</li>
+</ul>
+<p>Key features:</p>
+<ul class="simple">
+<li>supports many virtualization backends - Virtualbox; VmWare; Docker containers; AWS</li>
+<li>works with different provisioning tools</li>
+<li>Images called boxes can be loaded from an online library</li>
+</ul>
+<div class="figure">
+<img alt="_images/vagrant.png" src="_images/vagrant.png" />
+</div>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="example-vagrantfile">
+    <hgroup>
+      <h2>Example Vagrantfile</h2>
+    </hgroup>
+    <article class="">
+      <p>Vagrantfile:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env ruby</span>
+<span class="n">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span> <span class="n">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s2">&quot;ubuntu/xenial64&quot;</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="s2">&quot;interaction&quot;</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span> <span class="n">guest</span><span class="p">:</span> <span class="mi">5000</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span><span class="mi">5000</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="s2">&quot;heroku_local&quot;</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="s2">&quot;ansible&quot;</span> <span class="n">do</span> <span class="o">|</span><span class="n">ansible</span><span class="o">|</span>
+        <span class="n">ansible</span><span class="o">.</span><span class="n">galaxy_role_file</span> <span class="o">=</span> <span class="s2">&quot;requirements.yml&quot;</span>
+        <span class="n">ansible</span><span class="o">.</span><span class="n">playbook</span> <span class="o">=</span> <span class="s2">&quot;playbook.yml&quot;</span>
+    <span class="n">end</span>
+<span class="n">end</span>
+</pre></div>
+</div>
+<p>Run it:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ vagrant up
+</pre></div>
+</div>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="provisioning">
+    <hgroup>
+      <h2>Provisioning</h2>
+    </hgroup>
+    <article class="">
+      <p>Vagrant lets you delegate the actual configuration of the machine to a provisioner</p>
+<p>Basic idea:</p>
+<ul class="simple">
+<li>Specify what you want installed on the machine</li>
+</ul>
+<p>Options:</p>
+<ul class="simple">
+<li>Shell scripting</li>
+<li>Chef</li>
+<li>Puppet</li>
+<li>Ansible</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="provisioning-case-study-ansible">
+    <hgroup>
+      <h2>Provisioning case study - Ansible</h2>
+    </hgroup>
+    <article class="">
+      <p>Basic idea:</p>
+<ul class="simple">
+<li>Write configuration in declarative style</li>
+<li>Say what should be done rather than how</li>
+</ul>
+<p>How it works:</p>
+<ul>
+<li><p class="first">Just needs SSH and Python</p>
+</li>
+<li><p class="first">Maintains an inventory of target hardware (more relevant to hosted infrastruture)</p>
+</li>
+<li><p class="first">A file called a playbook says what happens where</p>
+</li>
+<li><p class="first">Playbooks can be segmented into roles</p>
+<blockquote>
+<div><div class="figure">
+<img alt="_images/ansible.jpeg" src="_images/ansible.jpeg" />
+</div>
+</div></blockquote>
+</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="example-playbook-yml">
+    <hgroup>
+      <h2>Example playbook.yml</h2>
+    </hgroup>
+    <article class="">
+      <p>playbook.yml:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="o">-</span> <span class="n">hosts</span><span class="p">:</span> <span class="nb">all</span>
+<span class="n">roles</span><span class="p">:</span>
+   <span class="o">-</span> <span class="n">ansible</span><span class="o">-</span><span class="n">role</span><span class="o">-</span><span class="n">pgadmin4</span>
+   <span class="o">-</span> <span class="n">ansible</span><span class="o">-</span><span class="n">role</span><span class="o">-</span><span class="n">redis</span>
+   <span class="o">-</span> <span class="n">ansible</span><span class="o">-</span><span class="n">role</span><span class="o">-</span><span class="n">rqdashboard</span>
+   <span class="o">-</span> <span class="n">ansible</span><span class="o">-</span><span class="n">role</span><span class="o">-</span><span class="n">minio</span>
+   <span class="o">-</span> <span class="n">ansible</span><span class="o">-</span><span class="n">role</span><span class="o">-</span><span class="n">prometheus</span>
+   <span class="o">-</span> <span class="n">ansible</span><span class="o">-</span><span class="n">role</span><span class="o">-</span><span class="n">heroku</span>
+   <span class="o">-</span> <span class="n">ansible</span><span class="o">-</span><span class="n">role</span><span class="o">-</span><span class="n">sphinx</span>
+   <span class="o">-</span> <span class="n">ansible</span><span class="o">-</span><span class="n">role</span><span class="o">-</span><span class="n">django</span><span class="o">-</span><span class="n">project</span>
+</pre></div>
+</div>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="example-role">
+    <hgroup>
+      <h2>Example Role</h2>
+    </hgroup>
+    <article class="">
+      <p>main.yml:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">become</span><span class="p">:</span> <span class="n">yes</span>
+<span class="n">block</span><span class="p">:</span>
+   <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">docker</span> <span class="n">image</span>
+      <span class="n">docker_image</span><span class="p">:</span>
+      <span class="n">name</span><span class="p">:</span> <span class="n">dpage</span><span class="o">/</span><span class="n">pgadmin4</span><span class="p">:</span><span class="n">snapshot</span>
+   <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">docker</span> <span class="n">container</span>
+      <span class="n">docker_container</span><span class="p">:</span>
+      <span class="n">name</span><span class="p">:</span> <span class="n">pgadmin4</span>
+      <span class="n">image</span><span class="p">:</span> <span class="n">dpage</span><span class="o">/</span><span class="n">pgadmin4</span><span class="p">:</span><span class="n">snapshot</span>
+      <span class="n">network_mode</span><span class="p">:</span> <span class="n">host</span>
+      <span class="n">env</span><span class="p">:</span>
+         <span class="n">PGADMIN_DEFAULT_EMAIL</span><span class="p">:</span> <span class="n">vagrant</span>
+         <span class="n">PGADMIN_DEFAULT_PASSWORD</span><span class="p">:</span> <span class="n">vagrant</span>
+         <span class="n">PGADMIN_LISTEN_PORT</span><span class="p">:</span> <span class="mi">5050</span>
+      <span class="n">restart_policy</span><span class="p">:</span> <span class="n">always</span>
+</pre></div>
+</div>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="role-management-ansible-galaxy">
+    <hgroup>
+      <h2>Role management - Ansible Galaxy</h2>
+    </hgroup>
+    <article class="">
+      <p>Sharing roles between projects can be a challenge</p>
+<p>Basic idea:</p>
+<ul class="simple">
+<li>Host roles in a central location</li>
+</ul>
+<p>Ansible Galaxy lets you manage roles:</p>
+<ul class="simple">
+<li>both a tool and a website</li>
+<li>Ansible Galaxy website</li>
+<li>GitHub for private ones</li>
+</ul>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="what-we-ve-done-so-far">
+    <hgroup>
+      <h2>What we’ve done so far</h2>
+    </hgroup>
+    <article class="">
+      <ul class="simple">
+<li>Step by step guide on how to setup your laptop</li>
+<li>Defined ansible roles for common tasks</li>
+<li>Integrations repos are running with Virtual Machines</li>
+</ul>
+<p>Together this toolset integrates very nicely and essentially give you Heroku on your own laptop</p>
+
+
+
+
+    </article>
+  </slide>  <slide class="level-2" id="demonstration">
+    <hgroup>
+      <h2>Demonstration</h2>
+    </hgroup>
+    <article class="">
+      
+
+
+
+    </article>
+  </slide>
+
+
+  
+
+  <slide class="backdrop"></slide>
+
+</slides>
+
+<!--[if IE]>
+  <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+  <script>CFInstall.check({mode: 'overlay'});</script>
+<![endif]-->
+</body>
+</html>

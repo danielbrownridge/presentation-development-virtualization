@@ -168,5 +168,4 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
-
-
+slide_theme = 'slides2'
